@@ -30,7 +30,7 @@ export function renderLanding() {
       </div>
       <div class="landing-bottom">
         <div class="landing-meta">
-          <div class="qr-placeholder" data-action="show-qr" role="button" tabindex="0">QR</div>
+          <img class="qr-code" src="./assets/PSAR_OHS_Checklist_Suite_QR.png" alt="App QR Code" width="44" height="44" role="button" tabindex="0" data-action="show-qr">
           <button class="btn btn-sm" data-action="toggle-theme">${theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</button>
         </div>
       </div>

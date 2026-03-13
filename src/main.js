@@ -403,7 +403,7 @@ function showQrOverlay() {
   if (document.getElementById('qr-overlay')) return;
   const overlay = document.createElement('div');
   overlay.id = 'qr-overlay';
-  overlay.innerHTML = '<div class="qr-msg"><strong>QR Code</strong><p>QR code will be available once the app is deployed.</p></div>';
+  overlay.innerHTML = '<img src="./assets/PSAR_OHS_Checklist_Suite_QR.png" alt="QR Code">';
   document.body.appendChild(overlay);
   overlay.addEventListener('click', () => overlay.remove());
 }

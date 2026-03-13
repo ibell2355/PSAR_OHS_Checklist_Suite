@@ -10,7 +10,7 @@
  * force-purge the entire cache.
  */
 
-const CACHE_NAME = 'psar-ohs-v1';
+const CACHE_NAME = 'psar-ohs-v2';
 
 const APP_SHELL = [
   './',
@@ -28,7 +28,8 @@ const APP_SHELL = [
   './manifest.webmanifest',
   './assets/psar_logo.png',
   './assets/icon-192.png',
-  './assets/icon-512.png'
+  './assets/icon-512.png',
+  './assets/PSAR_OHS_Checklist_Suite_QR.png'
 ];
 
 /* ---- Install: pre-cache app shell ---- */
