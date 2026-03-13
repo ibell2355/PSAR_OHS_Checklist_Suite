@@ -84,24 +84,24 @@ sections:
         type: inspection
         label: Tow hitch / recovery points in serviceable condition (if fitted)
 
-  tyres_wheels:
-    title: 2. TYRES AND WHEELS
+  tires_wheels:
+    title: 2. tireS AND WHEELS
     items:
-      tyre_tread:
+      tire_tread:
         type: inspection
-        label: Tyre tread depth adequate (min 1.5 mm across full width)
-      tyre_condition:
+        label: Tire tread depth adequate (min 1.5 mm across full width)
+      tire_condition:
         type: inspection
         label: No cuts, bulges, cracks, or uneven wear
-      tyre_pressures:
+      tire_pressures:
         type: inspection
-        label: Tyre pressures checked / within specification
+        label: Tire pressures checked / within specification
       wheel_nuts:
         type: inspection
         label: Wheel nuts present and tight
-      spare_tyre:
+      spare_tire:
         type: inspection
-        label: Spare tyre present, inflated, and accessible
+        label: Spare tire present, inflated, and accessible
       jack_brace:
         type: inspection
         label: Jack and wheel brace present and serviceable

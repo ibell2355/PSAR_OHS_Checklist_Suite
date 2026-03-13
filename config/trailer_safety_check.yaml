@@ -83,24 +83,24 @@ sections:
         type: inspection
         label: Jack / stand stows securely for travel
 
-  tyres_wheels:
-    title: 3. TYRES AND WHEELS
+  tires_wheels:
+    title: 3. tireS AND WHEELS
     items:
-      tyre_tread:
+      tire_tread:
         type: inspection
-        label: Tyre tread depth adequate (min 1.5 mm)
-      tyre_condition:
+        label: tire tread depth adequate (min 1.5 mm)
+      tire_condition:
         type: inspection
         label: No cuts, bulges, cracks, or uneven wear
-      tyre_pressures:
+      tire_pressures:
         type: inspection
-        label: Tyre pressures checked / within specification
+        label: tire pressures checked / within specification
       wheel_nuts:
         type: inspection
         label: Wheel nuts / bolts present and tight
-      spare_tyre:
+      spare_tire:
         type: inspection
-        label: Spare tyre present and serviceable (if carried)
+        label: Spare tire present and serviceable (if carried)
       wheel_bearings:
         type: inspection
         label: Wheel bearings -- no play, no noise, no heat after travel
