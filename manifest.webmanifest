@@ -1,0 +1,13 @@
+{
+  "name": "PSAR OHS Checklist Suite",
+  "short_name": "PSAR OHS",
+  "description": "Offline-first OHS safety checklists for Search and Rescue field use",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fa",
+  "theme_color": "#1B3A5C",
+  "icons": [
+    { "src": "./assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

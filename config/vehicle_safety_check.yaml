@@ -1,0 +1,216 @@
+# ============================================================
+# PSAR Vehicle Safety Check — Pre-Use Inspection Checklist
+# ============================================================
+# Edit this file to change checklist content without modifying
+# app code. The app reads this YAML at startup.
+#
+# Supported item types:
+#   inspection — OK / N/A check with optional notes
+#   text       — short text input field
+#   date       — date input field (prefill: today auto-fills)
+#   radio      — single-select from options list
+#   textarea   — multi-line text input
+#
+# Optional item fields:
+#   helper      — helper text shown below the item
+#   placeholder — placeholder text for inputs
+#   prefill     — 'today' to auto-fill with current date
+#   report      — true to include in report output
+# ============================================================
+
+id: vehicle_safety_check
+title: Vehicle Safety Check
+subtitle: Search and Rescue — Pre-Use Inspection Checklist
+version: 1
+
+# Header fields shown above the inspection sections
+header_fields:
+  date:
+    type: date
+    label: Date
+    prefill: today
+    report: true
+  inspector_name:
+    type: text
+    label: Inspector Name
+    placeholder: Full name
+    report: true
+  vehicle_rego:
+    type: text
+    label: Vehicle Rego / ID
+    placeholder: e.g. ABC-123
+    report: true
+  odometer:
+    type: text
+    label: Odometer (km)
+    placeholder: e.g. 45230
+    report: true
+  make_model:
+    type: text
+    label: Make / Model
+    placeholder: e.g. Toyota HiLux
+    report: true
+  organisation:
+    type: text
+    label: Organisation / Unit
+    placeholder: e.g. PSAR
+    report: true
+
+sections:
+  exterior_walkaround:
+    title: 1. EXTERIOR WALKAROUND
+    items:
+      body_panels:
+        type: inspection
+        label: Body panels free of significant damage / dents
+      fluid_leaks:
+        type: inspection
+        label: No fluid leaks underneath vehicle (oil, coolant, fuel, brake)
+      exhaust_system:
+        type: inspection
+        label: Exhaust system secure, no excessive noise or fumes
+      doors_bonnet:
+        type: inspection
+        label: Doors, bonnet, and tailgate open / close / latch correctly
+      number_plates:
+        type: inspection
+        label: Number plates present, legible, and secure
+      tow_hitch:
+        type: inspection
+        label: Tow hitch / recovery points in serviceable condition (if fitted)
+
+  tyres_wheels:
+    title: 2. TYRES AND WHEELS
+    items:
+      tyre_tread:
+        type: inspection
+        label: Tyre tread depth adequate (min 1.5 mm across full width)
+      tyre_condition:
+        type: inspection
+        label: No cuts, bulges, cracks, or uneven wear
+      tyre_pressures:
+        type: inspection
+        label: Tyre pressures checked / within specification
+      wheel_nuts:
+        type: inspection
+        label: Wheel nuts present and tight
+      spare_tyre:
+        type: inspection
+        label: Spare tyre present, inflated, and accessible
+      jack_brace:
+        type: inspection
+        label: Jack and wheel brace present and serviceable
+
+  lights_signals:
+    title: 3. LIGHTS AND SIGNALS
+    items:
+      headlights:
+        type: inspection
+        label: Headlights -- low beam and high beam operational
+      tail_brake_lights:
+        type: inspection
+        label: Tail lights and brake lights operational
+      indicators:
+        type: inspection
+        label: Indicators -- front, rear, and side operational
+      hazard_lights:
+        type: inspection
+        label: Hazard lights operational
+      reverse_lights:
+        type: inspection
+        label: Reverse lights operational
+      auxiliary_lights:
+        type: inspection
+        label: Auxiliary / work lights operational (if fitted)
+
+  mirrors_windshield:
+    title: 4. MIRRORS, WINDSHIELD AND VISIBILITY
+    items:
+      windshield:
+        type: inspection
+        label: Windshield free of cracks / chips impairing vision
+      wipers_washers:
+        type: inspection
+        label: Wipers and washers operational, blades in good condition
+      mirrors:
+        type: inspection
+        label: All mirrors present, correctly adjusted, and undamaged
+      rearview_camera:
+        type: inspection
+        label: Rear-view camera / sensors working (if fitted)
+
+  safety_equipment:
+    title: 5. SAFETY EQUIPMENT
+    items:
+      fire_extinguisher:
+        type: inspection
+        label: Fire extinguisher present, within service date, gauge in green
+      first_aid_kit:
+        type: inspection
+        label: First aid kit present and stocked
+      warning_triangle:
+        type: inspection
+        label: Warning triangle / hazard devices present
+      hi_vis:
+        type: inspection
+        label: Hi-vis vests available
+      recovery_equipment:
+        type: inspection
+        label: Vehicle recovery equipment present (as required)
+
+  cab_controls:
+    title: 6. CAB CONTROLS AND DRIVETRAIN
+    items:
+      seat_belts:
+        type: inspection
+        label: Seat belts -- all positions functional, webbing undamaged
+      seats_restraints:
+        type: inspection
+        label: Seats and head restraints adjustable, secure
+      horn:
+        type: inspection
+        label: Horn operational
+      foot_brake:
+        type: inspection
+        label: Foot brake -- firm pedal, no excessive travel
+      park_brake:
+        type: inspection
+        label: Park brake holds vehicle on incline
+      steering:
+        type: inspection
+        label: Steering -- no excessive play or noise
+      dashboard_lights:
+        type: inspection
+        label: Dashboard warning lights -- none illuminated abnormally
+      four_wd:
+        type: inspection
+        label: 4WD engagement functional (if applicable)
+      climate_control:
+        type: inspection
+        label: Air conditioning / heating operational
+
+# Conclusion section — rendered after inspection sections
+conclusion:
+  overall_status:
+    type: radio
+    label: Overall Conclusion
+    options: [SAFE TO OPERATE, DEFECTS NOTED - SEE BELOW, DO NOT OPERATE]
+  comments:
+    type: textarea
+    label: Comments / Corrective Actions Required
+    placeholder: Enter any defects or corrective actions required
+  inspector_signature:
+    type: text
+    label: Inspector Signature
+    placeholder: Full name
+  inspector_sign_date:
+    type: date
+    label: Date
+    prefill: today
+  supervisor_review:
+    type: text
+    label: Supervisor Review
+    placeholder: Full name
+  supervisor_sign_date:
+    type: date
+    label: Date

@@ -1,0 +1,12 @@
+{
+  "name": "psar-ohs-checklist-suite",
+  "version": "0.1.0",
+  "buildDate": "2026-03-12",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "py -3 -m http.server 4175 --bind 127.0.0.1",
+    "open": "start http://localhost:4175",
+    "stamp": "node -e \"const fs=require('fs'),p=JSON.parse(fs.readFileSync('package.json'));p.buildDate=new Date().toISOString().slice(0,10);fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\\n')\""
+  }
+}
