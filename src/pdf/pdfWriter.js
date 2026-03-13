@@ -73,11 +73,10 @@ export class PdfWriter {
     const escaped = this._escPdf(str);
     const py = this._py(y);
 
-    let cmds = '';
-    if (opts.color) {
-      const [r, g, b] = opts.color;
-      cmds += `${f(r)} ${f(g)} ${f(b)} rg `;
-    }
+    // Always set fill color explicitly — prevents stale color from prior
+    // operations (e.g. white section-header text) bleeding into later text.
+    const [r, g, b] = opts.color || [0, 0, 0];
+    let cmds = `${f(r)} ${f(g)} ${f(b)} rg `;
     cmds += `BT ${font} ${size} Tf ${f(x)} ${f(py)} Td (${escaped}) Tj ET\n`;
     this._content += cmds;
     return this;
@@ -129,7 +128,8 @@ export class PdfWriter {
   /** Draw a checkmark using ZapfDingbats (char '4' = heavy check mark). */
   checkMark(x, y, size = 12) {
     const py = this._py(y);
-    this._content += `BT /F3 ${size} Tf ${f(x)} ${f(py)} Td (4) Tj ET\n`;
+    // Explicitly set black fill so checkmarks are always visible
+    this._content += `0 0 0 rg BT /F3 ${size} Tf ${f(x)} ${f(py)} Td (4) Tj ET\n`;
     return this;
   }
 
