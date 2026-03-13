@@ -1,0 +1,194 @@
+# ============================================================
+# PSAR Trailer Safety Check — Pre-Use Inspection Checklist
+# ============================================================
+
+id: trailer_safety_check
+title: Trailer Safety Check
+subtitle: Search and Rescue -- Pre-Use Inspection Checklist
+version: 1
+details_heading: Trailer Details
+
+statuses:
+  ok: OK
+  na: N/A
+
+header_fields:
+  date:
+    type: date
+    label: Date
+    prefill: today
+    report: true
+  inspector_name:
+    type: text
+    label: Inspector Name
+    placeholder: Full name
+    report: true
+  trailer_rego:
+    type: text
+    label: Trailer Rego / ID
+    placeholder: e.g. TR-456
+    report: true
+  trailer_type:
+    type: text
+    label: Trailer Type
+    placeholder: e.g. Box trailer
+    report: true
+  tow_vehicle_rego:
+    type: text
+    label: Tow Vehicle Rego / ID
+    placeholder: e.g. ABC-123
+    report: true
+  organisation:
+    type: text
+    label: Organisation / Unit
+    placeholder: e.g. PSAR
+    report: true
+
+sections:
+  coupler_hitch:
+    title: 1. COUPLER, HITCH AND SAFETY CHAINS
+    items:
+      coupler_condition:
+        type: inspection
+        label: Coupler / coupling mechanism in good condition, operates freely
+      coupler_sized:
+        type: inspection
+        label: Coupler correctly sized for tow ball
+      coupler_locking:
+        type: inspection
+        label: Coupler locking mechanism functional and secure
+      safety_chains:
+        type: inspection
+        label: Safety chains present, correct rating, free of damage
+      chains_crossed:
+        type: inspection
+        label: Safety chains crossed under coupling with minimal slack
+      d_shackles:
+        type: inspection
+        label: D-shackles / fasteners rated, secured, and pins retained
+
+  breakaway_jack:
+    title: 2. BREAKAWAY SYSTEM AND JACK / STAND
+    items:
+      breakaway_cable:
+        type: inspection
+        label: Breakaway cable / chain connected to tow vehicle (if required)
+      breakaway_battery:
+        type: inspection
+        label: Breakaway battery charged (if electric brakes fitted)
+      jockey_wheel:
+        type: inspection
+        label: Jockey wheel / jack operational, handle secure
+      jack_stow:
+        type: inspection
+        label: Jack / stand stows securely for travel
+
+  tyres_wheels:
+    title: 3. TYRES AND WHEELS
+    items:
+      tyre_tread:
+        type: inspection
+        label: Tyre tread depth adequate (min 1.5 mm)
+      tyre_condition:
+        type: inspection
+        label: No cuts, bulges, cracks, or uneven wear
+      tyre_pressures:
+        type: inspection
+        label: Tyre pressures checked / within specification
+      wheel_nuts:
+        type: inspection
+        label: Wheel nuts / bolts present and tight
+      spare_tyre:
+        type: inspection
+        label: Spare tyre present and serviceable (if carried)
+      wheel_bearings:
+        type: inspection
+        label: Wheel bearings -- no play, no noise, no heat after travel
+
+  lights_wiring:
+    title: 4. LIGHTS, WIRING AND CONNECTOR
+    items:
+      electrical_connector:
+        type: inspection
+        label: Electrical connector -- pins clean, no damage, seats firmly
+      tail_lights:
+        type: inspection
+        label: Tail lights operational
+      brake_lights:
+        type: inspection
+        label: Brake lights operational
+      indicators:
+        type: inspection
+        label: Indicators operational -- left and right
+      number_plate_light:
+        type: inspection
+        label: Number plate light operational
+      wiring_harness:
+        type: inspection
+        label: Wiring harness secured, no chafing or exposed wires
+
+  structure_load:
+    title: 5. STRUCTURE, DOORS, RAMPS AND LOAD SECURITY
+    items:
+      chassis_frame:
+        type: inspection
+        label: Chassis / frame free of cracks, significant corrosion, or distortion
+      floor_deck:
+        type: inspection
+        label: Floor / deck sound and secure
+      doors_ramp:
+        type: inspection
+        label: Doors / tailgate / ramp operate correctly and latch securely
+      tiedown_points:
+        type: inspection
+        label: Tie-down points present and in good condition
+      load_secured:
+        type: inspection
+        label: Load secured and within rated capacity
+      mudguards:
+        type: inspection
+        label: Mudguards / fenders present and secure
+      reflectors:
+        type: inspection
+        label: Reflectors / markings present and visible
+
+  trailer_brakes:
+    title: 6. TRAILER BRAKES (IF FITTED)
+    items:
+      surge_brakes:
+        type: inspection
+        label: Override / surge brakes engage correctly
+      electric_brake:
+        type: inspection
+        label: Electric brake controller adjusted and responding
+      brake_lines:
+        type: inspection
+        label: Brake lines / cables free of damage and leaks
+      hand_brake:
+        type: inspection
+        label: Hand brake / park brake holds trailer
+
+conclusion:
+  overall_status:
+    type: radio
+    label: Overall Conclusion
+    options: [ROADWORTHY / SAFE TO USE, DEFECTS NOTED - SEE BELOW, DO NOT USE]
+  comments:
+    type: textarea
+    label: Comments / Corrective Actions Required
+    placeholder: Enter any defects or corrective actions required
+  inspector_signature:
+    type: text
+    label: Inspector Signature
+    placeholder: Full name
+  inspector_sign_date:
+    type: date
+    label: Date
+    prefill: today
+  supervisor_review:
+    type: text
+    label: Supervisor Review
+    placeholder: Full name
+  supervisor_sign_date:
+    type: date
+    label: Date

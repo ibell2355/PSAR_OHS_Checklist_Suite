@@ -10,7 +10,7 @@
  * force-purge the entire cache.
  */
 
-const CACHE_NAME = 'psar-ohs-v2';
+const CACHE_NAME = 'psar-ohs-v3';
 
 const APP_SHELL = [
   './',
@@ -23,7 +23,11 @@ const APP_SHELL = [
   './src/utils/simpleYaml.js',
   './src/pdf/pdfWriter.js',
   './src/pdf/vehicleReport.js',
+  './src/pdf/checklistReport.js',
   './config/vehicle_safety_check.yaml',
+  './config/trailer_safety_check.yaml',
+  './config/pfd_buoyancy_check.yaml',
+  './config/rope_gear_check.yaml',
   './package.json',
   './manifest.webmanifest',
   './assets/psar_logo.png',

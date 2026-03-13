@@ -22,6 +22,11 @@ id: vehicle_safety_check
 title: Vehicle Safety Check
 subtitle: Search and Rescue — Pre-Use Inspection Checklist
 version: 1
+details_heading: Vehicle Details
+
+statuses:
+  ok: OK
+  na: N/A
 
 # Header fields shown above the inspection sections
 header_fields:

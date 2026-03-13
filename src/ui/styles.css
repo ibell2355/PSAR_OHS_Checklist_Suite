@@ -242,12 +242,13 @@ textarea {
 }
 .landing-actions .btn { font-size: 1rem; padding: 14px; }
 
-/* Future checklists — dimmed placeholder buttons */
-.landing-actions .btn-future {
-  opacity: 0.45;
-  pointer-events: none;
-  font-size: 0.92rem;
-  padding: 12px;
+/* Section note (italic text below section header) */
+.section-note {
+  font-style: italic;
+  margin: 4px 0 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.4;
 }
 
 .landing-bottom {
@@ -451,6 +452,34 @@ textarea {
   background: var(--primary-soft);
   color: var(--primary);
   border-color: var(--primary);
+}
+
+/* Defect button (PFD checklist) */
+.status-btn.defect-btn.active {
+  background: var(--warning-soft);
+  color: var(--warning);
+  border-color: var(--warning);
+}
+
+/* Pass button (Rope Gear checklist) */
+.status-btn.pass-btn.active {
+  background: var(--success-soft);
+  color: var(--success);
+  border-color: var(--success);
+}
+
+/* Monitor button (Rope Gear checklist) */
+.status-btn.monitor-btn.active {
+  background: var(--warning-soft);
+  color: var(--warning);
+  border-color: var(--warning);
+}
+
+/* Retire button (Rope Gear checklist) */
+.status-btn.retire-btn.active {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-color: var(--danger);
 }
 
 /* Notes toggle */

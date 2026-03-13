@@ -18,13 +18,13 @@ export function renderLanding() {
         <button class="btn btn-accent btn-block" data-action="open-checklist" data-id="vehicle_safety_check">
           Vehicle Safety Check
         </button>
-        <button class="btn btn-block btn-future" disabled>
+        <button class="btn btn-accent btn-block" data-action="open-checklist" data-id="trailer_safety_check">
           Trailer Safety Check
         </button>
-        <button class="btn btn-block btn-future" disabled>
+        <button class="btn btn-accent btn-block" data-action="open-checklist" data-id="pfd_buoyancy_check">
           Annual PFD Buoyancy Check
         </button>
-        <button class="btn btn-block btn-future" disabled>
+        <button class="btn btn-accent btn-block" data-action="open-checklist" data-id="rope_gear_check">
           Annual Technical Rope Gear Check
         </button>
       </div>
@@ -44,6 +44,7 @@ export function renderChecklist(config, state) {
   if (!config) return '<div class="panel"><p>Error loading checklist configuration.</p></div>';
 
   const sections = config.sections;
+  const statuses = config.statuses || { ok: 'OK', na: 'N/A' };
   const allInsp = getAllInspectionIds(sections);
   const completed = allInsp.filter(id => state.items[id]).length;
 
@@ -83,8 +84,12 @@ export function renderChecklist(config, state) {
         </div>
         <div class="section-body${isCollapsed ? ' collapsed' : ''}" data-section-body="${sectionId}">`;
 
+    if (section.note) {
+      html += `<p class="subtle section-note">${esc(section.note)}</p>`;
+    }
+
     for (const [itemId, item] of Object.entries(items)) {
-      html += renderItem(itemId, item, state);
+      html += renderItem(itemId, item, state, statuses);
     }
 
     html += `
@@ -129,27 +134,30 @@ function renderHeaderFields(config, state) {
 
 /* ---- Item renderers ---- */
 
-function renderItem(id, item, state) {
-  if (item.type === 'inspection') return renderInspection(id, item, state);
+function renderItem(id, item, state, statuses) {
+  if (item.type === 'inspection') return renderInspection(id, item, state, statuses);
   if (item.type === 'text') return renderTextField(id, item, state);
   return '';
 }
 
-function renderInspection(id, item, state) {
+function renderInspection(id, item, state, statuses) {
   const status = state.items[id] || '';
   const notes = state.notes[id] || '';
-  const okActive = status === 'ok' ? ' active' : '';
-  const naActive = status === 'na' ? ' active' : '';
   const hasNotes = notes ? ' has-notes' : '';
   const notesVisible = notes ? '' : ' hidden';
+
+  let statusButtons = '';
+  for (const [key, label] of Object.entries(statuses)) {
+    const active = status === key ? ' active' : '';
+    statusButtons += `<button class="status-btn ${key}-btn${active}" data-action="set-status" data-item="${id}" data-status="${key}">${esc(label)}</button>`;
+  }
 
   return `
     <div class="inspection-item">
       <div class="inspection-row">
         <span class="inspection-label">${esc(item.label)}${item.helper ? `<span class="helper-text">${esc(item.helper)}</span>` : ''}</span>
         <div class="inspection-actions">
-          <button class="status-btn ok-btn${okActive}" data-action="set-status" data-item="${id}" data-status="ok">OK</button>
-          <button class="status-btn na-btn${naActive}" data-action="set-status" data-item="${id}" data-status="na">N/A</button>
+          ${statusButtons}
           <button class="notes-toggle${hasNotes}" data-action="toggle-item-notes" data-item="${id}">+ Notes</button>
         </div>
       </div>
@@ -171,6 +179,20 @@ function renderTextField(id, item, state) {
 
 /* ---- Conclusion section ---- */
 
+function getOptionClass(index, total) {
+  if (index === 0) return 'safe';
+  if (index === total - 1) return 'danger-opt';
+  return 'warning';
+}
+
+function getStatusClass(value, options) {
+  if (!options || options.length === 0) return 'status-safe';
+  const idx = options.indexOf(value);
+  if (idx === 0) return 'status-safe';
+  if (idx === options.length - 1) return 'status-danger';
+  return 'status-warning';
+}
+
 function renderConclusionSection(config, state) {
   const conc = config.conclusion;
   if (!conc) return '';
@@ -183,11 +205,10 @@ function renderConclusionSection(config, state) {
     const selected = concState.overall_status || '';
     const options = conc.overall_status.options || [];
     html += `<div class="field-item"><label class="field-label">${esc(conc.overall_status.label)}</label><div class="radio-group">`;
-    for (const opt of options) {
+    for (let i = 0; i < options.length; i++) {
+      const opt = options[i];
       const checked = selected === opt ? 'checked' : '';
-      let cls = 'safe';
-      if (opt.includes('DEFECT')) cls = 'warning';
-      if (opt.includes('DO NOT')) cls = 'danger-opt';
+      const cls = getOptionClass(i, options.length);
       html += `
         <label class="radio-option ${cls}">
           <input type="radio" name="overall_status" data-conclusion="overall_status" value="${escAttr(opt)}" ${checked}>
@@ -249,6 +270,7 @@ function renderConclusionSection(config, state) {
 export function renderReport(config, state) {
   if (!config) return '<div class="panel"><p>Error loading configuration.</p></div>';
 
+  const statuses = config.statuses || { ok: 'OK', na: 'N/A' };
   const timestamp = state.startedAt
     ? new Date(state.startedAt).toLocaleString()
     : new Date().toLocaleString();
@@ -271,6 +293,7 @@ export function renderReport(config, state) {
         <p class="report-disclaimer">This form is a controlled document. Retain completed forms per organisational records policy.</p>`;
 
   // Header fields summary
+  const detailsHeading = config.details_heading || config.title + ' Details';
   const headerFields = config.header_fields || {};
   const filledFields = [];
   for (const [id, field] of Object.entries(headerFields)) {
@@ -279,7 +302,7 @@ export function renderReport(config, state) {
     }
   }
   if (filledFields.length > 0) {
-    html += '<div class="report-section"><h3>Vehicle Details</h3><dl class="report-fields">';
+    html += `<div class="report-section"><h3>${esc(detailsHeading)}</h3><dl class="report-fields">`;
     for (const f of filledFields) {
       html += `<dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd>`;
     }
@@ -287,6 +310,10 @@ export function renderReport(config, state) {
   }
 
   // Inspection results by section
+  const conclusionOptions = (config.conclusion && config.conclusion.overall_status)
+    ? config.conclusion.overall_status.options || []
+    : [];
+
   for (const [sectionId, section] of Object.entries(config.sections)) {
     const items = section.items || {};
     const entries = Object.entries(items).filter(([id]) => state.items[id]);
@@ -294,22 +321,24 @@ export function renderReport(config, state) {
 
     html += `<div class="report-section"><h3>${esc(section.title)}</h3><ul>`;
     for (const [id, item] of entries) {
-      const status = state.items[id] === 'ok' ? 'OK' : 'N/A';
+      const statusKey = state.items[id];
+      const statusLabel = statuses[statusKey] || statusKey.toUpperCase();
       const notes = state.notes[id] ? ` — ${esc(state.notes[id])}` : '';
-      html += `<li>[${status}] ${esc(item.label)}${notes}</li>`;
+      html += `<li>[${esc(statusLabel)}] ${esc(item.label)}${notes}</li>`;
     }
     html += '</ul></div>';
   }
 
   // Conclusion
   if (concState.overall_status) {
-    let statusClass = 'status-safe';
-    if (concState.overall_status.includes('DEFECT')) statusClass = 'status-warning';
-    if (concState.overall_status.includes('DO NOT')) statusClass = 'status-danger';
+    const statusClass = getStatusClass(concState.overall_status, conclusionOptions);
     html += `<div class="report-section"><h3>Overall Conclusion</h3><p class="${statusClass}">${esc(concState.overall_status)}</p></div>`;
   }
   if (concState.comments) {
-    html += `<div class="report-section"><h3>Comments</h3><p>${esc(concState.comments)}</p></div>`;
+    const commentsLabel = (config.conclusion && config.conclusion.comments)
+      ? config.conclusion.comments.label
+      : 'Comments';
+    html += `<div class="report-section"><h3>${esc(commentsLabel)}</h3><p>${esc(concState.comments)}</p></div>`;
   }
 
   html += `

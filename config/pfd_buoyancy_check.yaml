@@ -1,0 +1,163 @@
+# ============================================================
+# PSAR Annual PFD Buoyancy Check — Inspection Checklist
+# ============================================================
+
+id: pfd_buoyancy_check
+title: Annual PFD Buoyancy Check
+subtitle: Search and Rescue -- Personal Flotation Device Inspection Checklist
+version: 1
+details_heading: PFD Details
+
+statuses:
+  ok: OK
+  defect: Defect
+  na: N/A
+
+header_fields:
+  date:
+    type: date
+    label: Date
+    prefill: today
+    report: true
+  inspector_name:
+    type: text
+    label: Inspector Name
+    placeholder: Full name
+    report: true
+  asset_id:
+    type: text
+    label: Asset ID / Tag No.
+    placeholder: e.g. PFD-001
+    report: true
+  make_model:
+    type: text
+    label: Make / Model
+    placeholder: e.g. Spinlock Deckvest
+    report: true
+  serial_number:
+    type: text
+    label: Serial Number
+    placeholder: Serial number
+    report: true
+  pfd_type:
+    type: text
+    label: PFD Type / Rating
+    placeholder: e.g. Level 150
+    report: true
+  date_of_manufacture:
+    type: date
+    label: Date of Manufacture
+    report: true
+  organisation:
+    type: text
+    label: Organisation / Unit
+    placeholder: e.g. PSAR
+    report: true
+
+sections:
+  shell_fabric:
+    title: 1. SHELL, FABRIC AND OUTER CONDITION
+    items:
+      outer_shell:
+        type: inspection
+        label: Outer shell / fabric free of tears, cuts, or punctures
+      uv_degradation:
+        type: inspection
+        label: No significant UV degradation (fading, brittleness)
+      mould_contamination:
+        type: inspection
+        label: No mould, mildew, or fuel / chemical contamination
+      colours_reflective:
+        type: inspection
+        label: Colours / reflective tape still visible and functional
+      drainage_holes:
+        type: inspection
+        label: Drainage holes clear and unobstructed
+
+  straps_buckles:
+    title: 2. STRAPS, BUCKLES AND CLOSURES
+    items:
+      straps:
+        type: inspection
+        label: All straps present and free of fraying, cuts, or wear
+      buckles_clips:
+        type: inspection
+        label: Buckles / clips engage and release correctly
+      zippers:
+        type: inspection
+        label: Zippers operate smoothly (if fitted)
+      stitching:
+        type: inspection
+        label: Stitching intact -- no loose, broken, or pulled threads
+      adjustment:
+        type: inspection
+        label: Adjustment mechanism allows full range of fit
+
+  flotation_inflation:
+    title: 3. FLOTATION AND INFLATION COMPONENTS
+    items:
+      inherent_foam:
+        type: inspection
+        label: Inherent foam -- no compression, waterlogging, or crumbling
+      foam_panels:
+        type: inspection
+        label: Foam panels evenly distributed, not shifted or bunched
+      inflatable_bladder:
+        type: inspection
+        label: Inflatable bladder holds air with no leaks (if applicable)
+      co2_cylinder:
+        type: inspection
+        label: CO2 cylinder present, full, within service date (if applicable)
+      oral_inflation:
+        type: inspection
+        label: Oral inflation tube functional and valve seals (if applicable)
+      auto_inflation:
+        type: inspection
+        label: Auto-inflation mechanism armed and indicator visible (if applicable)
+      buoyancy_test:
+        type: inspection
+        label: Buoyancy test passed -- floats at rated level in water
+
+  labels_markings:
+    title: 4. LABELS, MARKINGS AND SERVICE RECORD
+    items:
+      manufacturer_label:
+        type: inspection
+        label: Manufacturer's label present and legible
+      standards_marking:
+        type: inspection
+        label: Standards certification marking visible (e.g. AS 4758)
+      asset_marking:
+        type: inspection
+        label: Asset ID / organisation marking applied and legible
+      inspection_records:
+        type: inspection
+        label: Previous inspection records reviewed
+      service_life:
+        type: inspection
+        label: Service life limit not exceeded per manufacturer guidance
+
+conclusion:
+  overall_status:
+    type: radio
+    label: Overall Conclusion
+    options: [SERVICEABLE, REQUIRES REPAIR, REMOVE FROM SERVICE]
+  comments:
+    type: textarea
+    label: Defects / Corrective Actions / Reason for Removal
+    placeholder: Enter any defects, corrective actions, or reason for removal
+  inspector_signature:
+    type: text
+    label: Inspector Signature
+    placeholder: Full name
+  inspector_sign_date:
+    type: date
+    label: Date
+    prefill: today
+  supervisor_review:
+    type: text
+    label: Supervisor Review
+    placeholder: Full name
+  supervisor_sign_date:
+    type: date
+    label: Date

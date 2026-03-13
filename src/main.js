@@ -4,6 +4,9 @@
  * Handles routing, state management, persistence, and event delegation.
  * Mirrors the SAR Checklist App architecture with adaptations for
  * OHS inspection checklists (OK/N/A/Notes pattern, PDF output).
+ *
+ * Supports multiple checklists via per-checklist config caching and
+ * per-checklist state persistence (session_<checklistId> keys).
  */
 
 import { loadChecklistConfig } from './model/configLoader.js';
@@ -11,16 +14,34 @@ import { getValue, setValue } from './storage/db.js';
 import {
   renderLanding, renderChecklist, renderReport, getAllInspectionIds
 } from './ui/render.js';
-import { generateVehicleCheckPdf } from './pdf/vehicleReport.js';
+import { generateChecklistPdf } from './pdf/checklistReport.js';
+
+/* ---- Config cache ---- */
+
+const configCache = {};
+
+async function loadConfigForChecklist(checklistId) {
+  if (configCache[checklistId]) {
+    config = configCache[checklistId];
+    return;
+  }
+  const result = await loadChecklistConfig(checklistId);
+  if (result.ok) {
+    configCache[checklistId] = result.config;
+    config = result.config;
+  } else {
+    config = null;
+  }
+}
 
 /* ---- State ---- */
 
 let config = null;
 let state = defaultState();
 
-function defaultState() {
+function defaultState(checklistId) {
   return {
-    checklistId: 'vehicle_safety_check',
+    checklistId: checklistId || 'vehicle_safety_check',
     startedAt: null,
     fields: {},            // Header fields: date, inspector_name, etc.
     items: {},             // Inspection status: { itemId: 'ok' | 'na' }
@@ -37,15 +58,26 @@ let saveTimer = null;
 function debounceSave() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
-    await setValue('session', state);
+    await setValue(`session_${state.checklistId}`, state);
   }, 250);
 }
 
-async function hydrate() {
-  let saved = await getValue('session', null);
+async function hydrate(checklistId) {
+  const key = `session_${checklistId}`;
+  let saved = await getValue(key, null);
 
-  // Legacy localStorage fallback
-  if (!saved) {
+  // Migrate legacy 'session' key → 'session_vehicle_safety_check'
+  if (!saved && checklistId === 'vehicle_safety_check') {
+    saved = await getValue('session', null);
+    if (saved) {
+      // Persist under the new per-checklist key and remove the old one
+      await setValue(key, saved);
+      await setValue('session', undefined);
+    }
+  }
+
+  // Legacy localStorage fallback (only for vehicle_safety_check)
+  if (!saved && checklistId === 'vehicle_safety_check') {
     try {
       const raw = localStorage.getItem('ohs-checklist-session');
       if (raw) {
@@ -56,12 +88,14 @@ async function hydrate() {
   }
 
   if (saved) {
-    state = { ...defaultState(), ...saved };
+    state = { ...defaultState(checklistId), ...saved, checklistId };
     if (!Array.isArray(state.collapsedSections)) state.collapsedSections = [];
     if (typeof state.items !== 'object' || state.items === null) state.items = {};
     if (typeof state.notes !== 'object' || state.notes === null) state.notes = {};
     if (typeof state.fields !== 'object' || state.fields === null) state.fields = {};
     if (typeof state.conclusion !== 'object' || state.conclusion === null) state.conclusion = {};
+  } else {
+    state = defaultState(checklistId);
   }
 }
 
@@ -107,13 +141,24 @@ function prefillDates() {
 
 /* ---- Routing ---- */
 
-function route() {
+async function route() {
   const hash = location.hash || '#/';
   const viewRoot = document.getElementById('view-root');
 
   if (hash === '#/' || hash === '#') {
+    config = null;
     viewRoot.innerHTML = renderLanding();
   } else if (hash.startsWith('#/checklist/')) {
+    const id = hash.split('/')[2];
+    await loadConfigForChecklist(id);
+    if (!config) {
+      location.hash = '#/';
+      return;
+    }
+    // Load per-checklist state when switching checklists
+    if (state.checklistId !== id) {
+      await hydrate(id);
+    }
     if (!state.startedAt) {
       state.startedAt = new Date().toISOString();
     }
@@ -231,7 +276,8 @@ function handleClick(e) {
 
     case 'reset':
       if (confirm('Reset checklist? This will clear all progress.')) {
-        state = defaultState();
+        const currentId = state.checklistId;
+        state = defaultState(currentId);
         debounceSave();
         location.hash = '#/';
       }
@@ -291,12 +337,12 @@ function handleChange(e) {
 /* ---- Partial DOM updates ---- */
 
 function updateInspectionItem(itemId) {
-  const okBtn = document.querySelector(`[data-action="set-status"][data-item="${itemId}"][data-status="ok"]`);
-  const naBtn = document.querySelector(`[data-action="set-status"][data-item="${itemId}"][data-status="na"]`);
+  const buttons = document.querySelectorAll(`[data-action="set-status"][data-item="${itemId}"]`);
   const status = state.items[itemId];
 
-  if (okBtn) okBtn.classList.toggle('active', status === 'ok');
-  if (naBtn) naBtn.classList.toggle('active', status === 'na');
+  buttons.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.status === status);
+  });
 }
 
 function updateProgress() {
@@ -318,18 +364,25 @@ function updateProgress() {
 /* ---- PDF generation & sharing ---- */
 
 function generatePdfBlob() {
-  const pdfBytes = generateVehicleCheckPdf(config, state);
+  const pdfBytes = generateChecklistPdf(config, state);
   return new Blob([pdfBytes], { type: 'application/pdf' });
 }
 
 function buildPdfFilename() {
   const date = state.fields.date || new Date().toISOString().slice(0, 10);
-  const rego = state.fields.vehicle_rego || 'vehicle';
-  const safeName = rego.replace(/[^a-zA-Z0-9_-]/g, '_');
-  return `Vehicle_Safety_Check_${safeName}_${date}.pdf`;
+  const identifier = state.fields.vehicle_rego
+    || state.fields.trailer_rego
+    || state.fields.asset_id
+    || 'checklist';
+  const safeName = identifier.replace(/[^a-zA-Z0-9_-]/g, '_');
+  const prefix = config && config.title
+    ? config.title.replace(/[^a-zA-Z0-9 _-]/g, '').replace(/\s+/g, '_')
+    : 'Checklist';
+  return `${prefix}_${safeName}_${date}.pdf`;
 }
 
 async function sharePdf() {
+  const shareTitle = (config && config.title) || 'OHS Checklist';
   try {
     const blob = generatePdfBlob();
     const filename = buildPdfFilename();
@@ -338,7 +391,7 @@ async function sharePdf() {
     // Try native share with file
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
-        title: 'Vehicle Safety Check',
+        title: shareTitle,
         files: [file]
       });
       return;
@@ -439,16 +492,9 @@ async function registerSW() {
 async function init() {
   loadTheme();
 
-  const [configResult, pkgInfo] = await Promise.all([
-    loadChecklistConfig('vehicle_safety_check'),
-    fetch('./package.json').then(r => r.json()).catch(() => ({ version: '?', buildDate: '' }))
-  ]);
-
-  if (configResult.ok) {
-    config = configResult.config;
-  }
-
-  await hydrate();
+  const pkgInfo = await fetch('./package.json')
+    .then(r => r.json())
+    .catch(() => ({ version: '?', buildDate: '' }));
 
   // Version stamp
   const stamp = document.getElementById('build-stamp');
@@ -461,11 +507,11 @@ async function init() {
   viewRoot.addEventListener('change', handleChange);
 
   // Routing
-  window.addEventListener('hashchange', route);
+  window.addEventListener('hashchange', () => route());
   window.addEventListener('online', updateConnectivity);
   window.addEventListener('offline', updateConnectivity);
 
-  route();
+  await route();
   registerSW();
 }
 

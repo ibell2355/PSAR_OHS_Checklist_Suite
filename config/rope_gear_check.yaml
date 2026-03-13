@@ -1,0 +1,163 @@
+# ============================================================
+# PSAR Annual Technical Rope Gear Check — Inspection Checklist
+# ============================================================
+
+id: rope_gear_check
+title: Annual Technical Rope Gear Check
+subtitle: Search and Rescue -- Rope and Life Safety Equipment Inspection Checklist
+version: 1
+details_heading: Equipment Details
+
+statuses:
+  pass: Pass
+  monitor: Monitor
+  retire: Retire
+
+header_fields:
+  date:
+    type: date
+    label: Date
+    prefill: today
+    report: true
+  inspector_name:
+    type: text
+    label: Inspector Name
+    placeholder: Full name
+    report: true
+  asset_id:
+    type: text
+    label: Asset ID / Tag No.
+    placeholder: e.g. ROPE-001
+    report: true
+  gear_type:
+    type: text
+    label: Gear Type / Description
+    placeholder: e.g. 11mm Static Rope
+    report: true
+  manufacturer:
+    type: text
+    label: Manufacturer
+    placeholder: e.g. Petzl
+    report: true
+  serial_batch:
+    type: text
+    label: Serial / Batch No.
+    placeholder: Serial or batch number
+    report: true
+  date_of_manufacture:
+    type: date
+    label: Date of Manufacture
+    report: true
+  date_first_in_service:
+    type: date
+    label: Date First in Service
+    report: true
+
+sections:
+  visual_inspection:
+    title: 1. VISUAL INSPECTION -- ROPE / WEBBING / CORD
+    items:
+      sheath_cuts:
+        type: inspection
+        label: Sheath free of cuts, nicks, or abrasion damage
+      glazing:
+        type: inspection
+        label: No glazing, melting, or heat damage
+      discolouration:
+        type: inspection
+        label: No discolouration from chemical contamination
+      fuzzing:
+        type: inspection
+        label: No fuzzing, pilling, or excessive fibre wear
+      sheath_consistency:
+        type: inspection
+        label: Sheath consistency -- no flat spots, lumps, or bunching
+      end_terminations:
+        type: inspection
+        label: End terminations (sewn, spliced, knotted) intact
+      sheath_core_slippage:
+        type: inspection
+        label: Sheath / core slippage -- sheath moves freely without bunching
+
+  tactile_inspection:
+    title: 2. TACTILE INSPECTION -- ROPE / WEBBING / CORD
+    items:
+      hard_stiff:
+        type: inspection
+        label: No hard or stiff spots (indicates core damage or contamination)
+      soft_mushy:
+        type: inspection
+        label: No soft or mushy spots (indicates core failure)
+      lumps:
+        type: inspection
+        label: No lumps or inconsistencies felt through sheath
+      diameter:
+        type: inspection
+        label: Diameter consistent along full length
+      flexibility:
+        type: inspection
+        label: Flexibility uniform -- bends evenly without kinking
+
+  labels_markings:
+    title: 3. LABELS, MARKINGS AND TRACEABILITY
+    items:
+      manufacturer_label:
+        type: inspection
+        label: Manufacturer's label / ID tape present and legible
+      standards_marking:
+        type: inspection
+        label: Standards marking visible (e.g. EN 1891, EN 354, AS/NZS)
+      asset_marking:
+        type: inspection
+        label: Organisation asset ID marking applied and legible
+      usage_log:
+        type: inspection
+        label: Usage / service log reviewed and up to date
+      service_life:
+        type: inspection
+        label: Service life limit not exceeded per manufacturer guidance
+
+  associated_hardware:
+    title: 4. ASSOCIATED HARDWARE (HIGH-LEVEL CHECK)
+    note: This section covers a brief check of hardware associated with the rope item. Detailed hardware inspections should use the appropriate equipment-specific checklist.
+    items:
+      carabiners:
+        type: inspection
+        label: Carabiners -- gate action smooth, lock engages, no cracks or burrs
+      pulleys:
+        type: inspection
+        label: Pulleys -- sheave rotates freely, side plates intact, axle secure
+      descenders:
+        type: inspection
+        label: Descenders / belay devices -- no excessive wear grooves or cracks
+      connectors:
+        type: inspection
+        label: Connectors -- threads clean, swivels free, no deformation
+      sewn_terminations:
+        type: inspection
+        label: Sewn terminations on slings -- stitching intact, bar-tacks complete
+
+conclusion:
+  overall_status:
+    type: radio
+    label: Overall Conclusion
+    options: [PASS - Serviceable, MONITOR - Re-inspect at next scheduled date, RETIRE / REMOVE FROM SERVICE]
+  comments:
+    type: textarea
+    label: Defects / Observations / Reason for Retirement
+    placeholder: Enter any defects, observations, or reason for retirement
+  inspector_signature:
+    type: text
+    label: Inspector Signature
+    placeholder: Full name
+  inspector_sign_date:
+    type: date
+    label: Date
+    prefill: today
+  supervisor_review:
+    type: text
+    label: Supervisor Review
+    placeholder: Full name
+  supervisor_sign_date:
+    type: date
+    label: Date
