@@ -7,6 +7,7 @@ title: Annual PFD Buoyancy Check
 subtitle: Search and Rescue -- Personal Flotation Device Inspection Checklist
 version: 1
 details_heading: PFD Details
+procedure: pfd_buoyancy_check
 
 statuses:
   ok: OK

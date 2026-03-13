@@ -65,6 +65,14 @@ export function renderChecklist(config, state) {
       </div>
     </div>`;
 
+  // Procedure link (if this checklist has an associated procedure)
+  if (config.procedure) {
+    html += `
+      <div class="procedure-link-card">
+        <button class="btn btn-sm btn-primary btn-block" data-action="view-procedure" data-procedure="${escAttr(config.procedure)}">View Procedure</button>
+      </div>`;
+  }
+
   // Header fields (date, inspector, vehicle info)
   html += renderHeaderFields(config, state);
 
@@ -345,6 +353,21 @@ export function renderReport(config, state) {
       </div>
     </div>`;
   return html;
+}
+
+
+/* ===== Procedure View ===== */
+
+export function renderProcedure(html, checklistId) {
+  return `
+    <div class="procedure-page">
+      <div class="procedure-header">
+        <button class="btn btn-sm" data-action="back-to-checklist">&larr; Back to Checklist</button>
+      </div>
+      <div class="procedure-body">
+        <p class="subtle">Loading procedure...</p>
+      </div>
+    </div>`;
 }
 
 

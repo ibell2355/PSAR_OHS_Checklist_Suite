@@ -689,6 +689,76 @@ textarea {
 .status-warning { color: var(--warning); font-weight: 700; }
 .status-danger { color: var(--danger); font-weight: 700; }
 
+/* ===== Procedure Link Card ===== */
+
+.procedure-link-card {
+  margin-bottom: 8px;
+}
+
+/* ===== Procedure View ===== */
+
+.procedure-page {
+  padding-bottom: 20px;
+}
+.procedure-header {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 16px;
+}
+.procedure-body {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 16px;
+}
+
+/* Procedure content — preserve document formatting */
+.procedure-content h1 {
+  font-size: 1.25rem;
+  margin: 0 0 16px;
+  color: var(--primary);
+  line-height: 1.3;
+}
+.procedure-content h2 {
+  font-size: 1rem;
+  margin: 20px 0 8px;
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.procedure-content h3 {
+  font-size: 0.95rem;
+  margin: 16px 0 6px;
+  color: var(--text);
+}
+.procedure-content p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 10px;
+  color: var(--text);
+}
+.procedure-content ul,
+.procedure-content ol {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 12px;
+  padding-left: 1.5em;
+}
+.procedure-content li {
+  margin-bottom: 6px;
+}
+.procedure-content ol ol {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.procedure-content strong {
+  color: var(--text);
+}
+.procedure-content u {
+  text-underline-offset: 2px;
+}
+
 /* ===== Under Construction ===== */
 
 .under-construction {

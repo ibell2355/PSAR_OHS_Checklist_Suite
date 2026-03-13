@@ -12,7 +12,7 @@
 import { loadChecklistConfig } from './model/configLoader.js';
 import { getValue, setValue } from './storage/db.js';
 import {
-  renderLanding, renderChecklist, renderReport, getAllInspectionIds
+  renderLanding, renderChecklist, renderReport, renderProcedure, getAllInspectionIds
 } from './ui/render.js';
 import { generateChecklistPdf } from './pdf/checklistReport.js';
 
@@ -168,6 +168,10 @@ async function route() {
     updateConnectivity();
   } else if (hash === '#/report') {
     viewRoot.innerHTML = renderReport(config, state);
+  } else if (hash.startsWith('#/procedure/')) {
+    const procedureId = hash.split('/')[2];
+    viewRoot.innerHTML = renderProcedure(null, state.checklistId);
+    loadProcedure(procedureId, viewRoot);
   } else {
     location.hash = '#/';
   }
@@ -255,6 +259,12 @@ function handleClick(e) {
           if (input) input.focus();
         }
       }
+      break;
+    }
+
+    case 'view-procedure': {
+      const procId = btn.dataset.procedure;
+      location.hash = `#/procedure/${procId}`;
       break;
     }
 
@@ -459,6 +469,21 @@ function showQrOverlay() {
   overlay.innerHTML = '<img src="./assets/PSAR_OHS_Checklist_Suite_QR.png" alt="QR Code">';
   document.body.appendChild(overlay);
   overlay.addEventListener('click', () => overlay.remove());
+}
+
+/* ---- Procedure loading ---- */
+
+async function loadProcedure(procedureId, viewRoot) {
+  const container = viewRoot.querySelector('.procedure-body');
+  if (!container) return;
+  try {
+    const resp = await fetch(`./procedures/${procedureId}.html`);
+    if (!resp.ok) throw new Error('Not found');
+    const html = await resp.text();
+    container.innerHTML = html;
+  } catch {
+    container.innerHTML = '<p class="subtle">Unable to load procedure. Check your connection and try again.</p>';
+  }
 }
 
 /* ---- Connectivity ---- */
